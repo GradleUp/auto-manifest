@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("java-gradle-plugin")
     kotlin("jvm") version "1.3.72"
@@ -18,19 +16,10 @@ gradlePlugin {
     }
 }
 
-tasks.withType<Test>().configureEach {
-    dependsOn(":plugin:publishToMavenLocal")
-    inputs.dir("src/test/testProject")
-}
-
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib"))
     implementation("com.android.tools.build:gradle:3.6.3")
 
     testImplementation("junit:junit:4.13")
     testImplementation("com.google.truth:truth:1.0.1")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
 }
