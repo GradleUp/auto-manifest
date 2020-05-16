@@ -6,6 +6,8 @@ import com.android.build.gradle.api.AndroidSourceFile
 import com.android.build.gradle.api.AndroidSourceSet
 import com.android.build.gradle.tasks.GenerateBuildConfig
 import com.android.build.gradle.tasks.ManifestProcessorTask
+import com.gradleup.auto.manifest.GenerateManifestTask.Companion.generateManifest
+import com.gradleup.auto.manifest.GenerateManifestTask.Companion.pathSuffixFor
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.closureOf
 import org.gradle.kotlin.dsl.register
@@ -68,33 +70,17 @@ internal class AutoManifestConfigurator(
 
     private fun Project.forceGenerateDuringSync() {
         val packageName = extension.packageName
-        val suffix = GenerateManifestTask.pathSuffixFor(
-            rootProjectPath = rootProject.path,
-            currentProjectPath = path
-        )
+        val suffix = pathSuffixFor(rootProjectPath = rootProject.path, currentProjectPath = path)
         if (manifestFile.exists().not()) {
             if (packageName.isPresent) {
-                GenerateManifestTask.generateManifest(
-                    manifestFile,
-                    packageName,
-                    suffix
-                )
+                generateManifest(manifestFile, packageName, suffix)
             } else {
-                afterEvaluate {
-                    GenerateManifestTask.generateManifest(
-                        manifestFile,
-                        packageName,
-                        suffix
-                    )
-                }
+                afterEvaluate { generateManifest(manifestFile, packageName, suffix) }
             }
         }
     }
 
     private fun Project.isSyncing() = hasProperty("android.injected.invoked.from.ide")
 
-    private val Project.manifestFile get() = File(
-        buildDir,
-        GenerateManifestTask.GENERATED_MANIFEST_PATH
-    )
+    private val Project.manifestFile get() = File(buildDir, GenerateManifestTask.GENERATED_MANIFEST_PATH)
 }
