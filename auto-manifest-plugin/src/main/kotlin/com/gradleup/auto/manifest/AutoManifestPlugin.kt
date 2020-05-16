@@ -8,6 +8,7 @@ import com.android.build.gradle.tasks.GenerateBuildConfig
 import com.android.build.gradle.tasks.ManifestProcessorTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.kotlin.dsl.closureOf
 import org.gradle.kotlin.dsl.create
@@ -17,6 +18,8 @@ import java.io.File
 
 interface AutoManifestExtension {
     val packageName: Property<String>
+
+    val generatedManifest: RegularFileProperty
 }
 
 @Suppress("unused")
@@ -47,6 +50,10 @@ class AutoManifestPlugin : Plugin<Project> {
 
         val generateManifest = tasks.register<GenerateManifestTask>("generateAndroidManifest") {
             packageName.set(extension.packageName)
+            extension.generatedManifest.apply {
+                set(manifestFile)
+                finalizeValue()
+            }
         }
         tasks.withType<GenerateBuildConfig>().configureEach {
             mustRunAfter(generateManifest)
