@@ -57,6 +57,7 @@ internal class AutoManifestConfigurator(
 
         val generateManifest = project.tasks.register<GenerateManifestTask>("generateAndroidManifest") {
             packageName.set(extension.packageName)
+            replaceDashesWithDot.set(extension.replaceDashesWithDot.orElse(false))
             projectPath.set(project.path)
             rootProjectPath.set(rootProject.path)
         }
@@ -70,7 +71,11 @@ internal class AutoManifestConfigurator(
 
     private fun Project.forceGenerateDuringSync() {
         val packageName = extension.packageName
-        val suffix = pathSuffixFor(rootProjectPath = rootProject.path, currentProjectPath = path)
+        val suffix = pathSuffixFor(
+            rootProjectPath = rootProject.path,
+            currentProjectPath = path,
+            replaceDashesWithDot = extension.replaceDashesWithDot
+        )
         if (manifestFile.exists().not()) {
             if (packageName.isPresent) {
                 generateManifest(manifestFile, packageName, suffix)

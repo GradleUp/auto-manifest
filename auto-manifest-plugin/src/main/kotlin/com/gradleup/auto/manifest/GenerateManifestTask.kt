@@ -15,6 +15,9 @@ abstract class GenerateManifestTask : DefaultTask() {
     abstract val packageName: Property<String>
 
     @get:Input
+    abstract val replaceDashesWithDot: Property<Boolean>
+
+    @get:Input
     abstract val projectPath: Property<String>
 
     @get:Input
@@ -31,7 +34,8 @@ abstract class GenerateManifestTask : DefaultTask() {
     @TaskAction
     fun taskAction() {
         manifestFile.get().asFile.apply {
-            generateManifest(this, packageName, pathSuffixFor(rootProjectPath.get(), projectPath.get()))
+            val suffix = pathSuffixFor(rootProjectPath.get(), projectPath.get(), replaceDashesWithDot)
+            generateManifest(this, packageName, suffix)
         }
     }
 
@@ -55,10 +59,15 @@ abstract class GenerateManifestTask : DefaultTask() {
             )
         }
 
-        fun pathSuffixFor(rootProjectPath: String, currentProjectPath: String): String {
+        fun pathSuffixFor(
+            rootProjectPath: String,
+            currentProjectPath: String,
+            replaceDashesWithDot: Property<Boolean>
+        ): String {
             return currentProjectPath
                 .removePrefix(rootProjectPath)
                 .replace(':', '.')
+                .replace("-", replaceDashesWithDot.map { if (it) "." else "_" }.get())
         }
 
         private fun String.prependDot() = if (isNotEmpty()) ".$this" else this

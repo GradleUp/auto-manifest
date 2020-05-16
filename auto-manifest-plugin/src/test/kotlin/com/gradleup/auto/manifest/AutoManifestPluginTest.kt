@@ -83,6 +83,36 @@ class AutoManifestPluginTest {
         assertThat(result.task(":library:generateAndroidManifest")).isNull()
     }
 
+    @Test
+    fun `should generate manifest when module name has dash in them`() {
+        createNestedModules(listOf("library-dash"))
+
+        testProject.build("assembleDebug", "autoManifest { packageName = 'test' }")
+
+        val libraryDir = File(testProject.projectDir, "library-dash")
+        val libraryManifest = File(libraryDir, "build/generated/auto-manifest/AndroidManifest.xml")
+        assertThat(libraryManifest.readText()).contains("<manifest package=\"test.library_dash\" />")
+    }
+
+    @Test
+    fun `should generate manifest with dot when module name has dash in them AND replaceDashesWithDot is true`() {
+        createNestedModules(listOf("library-dash"))
+
+        testProject.build(
+            taskName = "assembleDebug",
+            extensionBlock = """
+                autoManifest { 
+                    packageName = 'test'
+                    replaceDashesWithDot = true
+                }
+            """.trimIndent()
+        )
+
+        val libraryDir = File(testProject.projectDir, "library-dash")
+        val libraryManifest = File(libraryDir, "build/generated/auto-manifest/AndroidManifest.xml")
+        assertThat(libraryManifest.readText()).contains("<manifest package=\"test.library.dash\" />")
+    }
+
     private fun createNestedModules(moduleNames: List<String>) {
         val commaSeparatedModules = moduleNames.joinToString(separator = ",") {
             "'${it.replace('/', ':')}'"
