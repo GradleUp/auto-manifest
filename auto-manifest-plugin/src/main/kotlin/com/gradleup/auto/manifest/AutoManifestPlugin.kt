@@ -4,11 +4,14 @@ import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryPlugin
 import com.android.build.gradle.api.AndroidSourceFile
 import com.android.build.gradle.api.AndroidSourceSet
+import com.android.build.gradle.tasks.GenerateBuildConfig
+import com.android.build.gradle.tasks.ManifestProcessorTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
 import org.gradle.kotlin.dsl.closureOf
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import java.io.File
 
@@ -20,38 +23,36 @@ interface AutoManifestExtension {
 class AutoManifestPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val extension = target.extensions.create<AutoManifestExtension>("autoManifest")
-        val manifestFile = File(target.buildDir, "generated/auto-manifest/AndroidManifest.xml")
+        target.setup(extension)
+    }
 
-        target.plugins.withType<LibraryPlugin> {
-            target.extensions.configure<BaseExtension>("android") {
+    private fun Project.setup(extension: AutoManifestExtension) {
+        plugins.withType<LibraryPlugin> {
+            extensions.configure<BaseExtension>("android") {
                 sourceSets.getByName("main") {
                     if (manifest.srcFile.isFile) {
-                        target.logger.warn("AndroidManifest.xml already exists. Skipping auto generation.")
+                        logger.warn("AndroidManifest.xml already exists. Skipping auto generation.")
                     } else {
-                        setupGeneratedManifest(manifestFile, target, extension)
+                        setupGeneratedManifest(this, extension)
                     }
                 }
             }
         }
     }
 
-    private fun AndroidSourceSet.setupGeneratedManifest(
-        manifestFile: File,
-        target: Project,
-        extension: AutoManifestExtension
-    ) {
-        manifest(closureOf<AndroidSourceFile> {
-            srcFile(manifestFile)
+    private fun Project.setupGeneratedManifest(sourceSet: AndroidSourceSet, extension: AutoManifestExtension) {
+        sourceSet.manifest(sourceSet.closureOf<AndroidSourceFile> {
+            srcFile(File(buildDir, GenerateManifestTask.GENERATED_MANIFEST_PATH))
         })
 
-        target.afterEvaluate {
-            manifestFile.parentFile.mkdirs()
-            manifestFile.writeText(
-                """
-                    <?xml version="1.0" encoding="utf-8"?>
-                    <manifest package="${extension.packageName.get()}" />
-                """.trimIndent()
-            )
+        val generateManifest = tasks.register<GenerateManifestTask>("generateAndroidManifest") {
+            packageName.set(extension.packageName)
+        }
+        tasks.withType<GenerateBuildConfig>().configureEach {
+            mustRunAfter(generateManifest)
+        }
+        tasks.withType<ManifestProcessorTask>().configureEach {
+            dependsOn(generateManifest)
         }
     }
 }

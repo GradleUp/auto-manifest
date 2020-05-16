@@ -40,6 +40,7 @@ class AutoManifestPluginTest {
         val result = testProject.build("assembleDebug")
 
         assertThat(result.task(":assembleDebug")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(result.task(":generateAndroidManifest")).isNull()
     }
 }
 
