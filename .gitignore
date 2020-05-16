@@ -5,8 +5,7 @@ build
 
 # IDEA/Android Studio ignores
 *.iml
-.idea/*
-.idea/gradle.xml
+.idea
 
 # IDEA/Android Studio Ignore exceptions
 !.idea/vcs.xml
