@@ -24,7 +24,9 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Run tests
-        run: ./gradlew build --stacktrace
+        run: ./gradlew build -s
+      - name: Build Sample
+        run: ./gradlew -p sample build -s
 
       - name: Bundle the build report
         if: failure()
