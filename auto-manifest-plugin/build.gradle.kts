@@ -2,7 +2,7 @@ plugins {
     id("java-gradle-plugin")
     kotlin("jvm") version "1.3.72"
     `kotlin-dsl`
-    `maven-publish`
+    id("com.gradle.plugin-publish") version "0.11.0"
 }
 
 gradlePlugin {
@@ -14,6 +14,12 @@ gradlePlugin {
             implementationClass = "com.gradleup.auto.manifest.AutoManifestPlugin"
         }
     }
+}
+
+pluginBundle {
+    website = "https://github.com/GradleUp/auto-manifest/"
+    vcsUrl = "https://github.com/GradleUp/auto-manifest.git"
+    tags = listOf("android", "AndroidManifest", "GradleUp")
 }
 
 dependencies {
