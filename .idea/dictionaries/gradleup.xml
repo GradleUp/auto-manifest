@@ -2,6 +2,7 @@
   <dictionary name="gradleup">
     <words>
       <w>gradleup</w>
+      <w>subproject</w>
     </words>
   </dictionary>
 </component>

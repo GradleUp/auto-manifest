@@ -68,6 +68,15 @@ class TestProjectRule : TestRule {
                 
             """.trimIndent()
         )
+        val valuesDir = File(projectDir, "src/main/res/values")
+        valuesDir.mkdirs()
+        File(valuesDir, "strings.xml").writeText(
+            """
+                <resources>
+                  <string name="app_name">AutoManifest</string>
+                </resources>
+            """.trimIndent()
+        )
 
         return GradleRunner.create()
             .forwardStdOutput(System.out.writer())

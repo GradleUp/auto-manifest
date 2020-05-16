@@ -18,6 +18,7 @@ import java.io.File
 
 interface AutoManifestExtension {
     val packageName: Property<String>
+    val applyRecursively: Property<Boolean>
 
     val generatedManifest: RegularFileProperty
 }
@@ -27,6 +28,17 @@ class AutoManifestPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val extension = target.extensions.create<AutoManifestExtension>("autoManifest")
         target.setup(extension)
+        extension.generatedManifest.apply {
+            set(target.manifestFile)
+            finalizeValue()
+        }
+        target.afterEvaluate {
+            if (extension.applyRecursively.getOrElse(true)) {
+                subprojects.forEach {
+                    it.setup(extension)
+                }
+            }
+        }
     }
 
     private fun Project.setup(extension: AutoManifestExtension) {
@@ -45,15 +57,11 @@ class AutoManifestPlugin : Plugin<Project> {
 
     private fun Project.setupGeneratedManifest(sourceSet: AndroidSourceSet, extension: AutoManifestExtension) {
         sourceSet.manifest(sourceSet.closureOf<AndroidSourceFile> {
-            srcFile(File(buildDir, GenerateManifestTask.GENERATED_MANIFEST_PATH))
+            srcFile(manifestFile)
         })
 
         val generateManifest = tasks.register<GenerateManifestTask>("generateAndroidManifest") {
             packageName.set(extension.packageName)
-            extension.generatedManifest.apply {
-                set(manifestFile)
-                finalizeValue()
-            }
         }
         tasks.withType<GenerateBuildConfig>().configureEach {
             mustRunAfter(generateManifest)
@@ -62,4 +70,6 @@ class AutoManifestPlugin : Plugin<Project> {
             dependsOn(generateManifest)
         }
     }
+
+    private val Project.manifestFile get() = File(buildDir, GenerateManifestTask.GENERATED_MANIFEST_PATH)
 }
