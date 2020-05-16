@@ -54,10 +54,12 @@ class TestProjectRule : TestRule {
                     id 'com.android.library'
                 }
                 
-                repositories {
-                    google()
-                    mavenCentral()
-                    jcenter()
+                allprojects {
+                    repositories {
+                        google()
+                        mavenCentral()
+                        jcenter()
+                    }
                 }
                 
                 android {
