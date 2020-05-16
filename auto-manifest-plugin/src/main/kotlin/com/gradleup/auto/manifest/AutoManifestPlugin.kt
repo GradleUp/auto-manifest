@@ -9,7 +9,6 @@ import org.gradle.api.Project
 import org.gradle.api.provider.Property
 import org.gradle.kotlin.dsl.closureOf
 import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.withType
 import java.io.File
 
@@ -24,13 +23,13 @@ class AutoManifestPlugin : Plugin<Project> {
         val manifestFile = File(target.buildDir, "generated/auto-manifest/AndroidManifest.xml")
 
         target.plugins.withType<LibraryPlugin> {
-            val android = target.extensions.getByName<BaseExtension>("android")
-
-            android.sourceSets.getByName("main") {
-                if (manifest.srcFile.isFile) {
-                    target.logger.warn("AndroidManifest.xml already exists. Skipping auto generation.")
-                } else {
-                    setupGeneratedManifest(manifestFile, target, extension)
+            target.extensions.configure<BaseExtension>("android") {
+                sourceSets.getByName("main") {
+                    if (manifest.srcFile.isFile) {
+                        target.logger.warn("AndroidManifest.xml already exists. Skipping auto generation.")
+                    } else {
+                        setupGeneratedManifest(manifestFile, target, extension)
+                    }
                 }
             }
         }
