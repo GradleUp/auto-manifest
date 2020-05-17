@@ -46,7 +46,14 @@ Sample App
 ----------
 
 Checkout the sample app with multi-modules where only the Application module defines `AndroidManifest.xml` - available
- [here][sample] 
+ [here][sample]
+
+In Action
+---------
+
+Here is the first integration into one of my apps:  https://github.com/tasomaniac/OpenLinkWith/commit/5b4029e922c33816fde67400e6c1ac40e015c9b9
+
+Plugin is added in couple of lines and many `AndroidManifest.xml` files are removed. 🎉
 
 [lazy]: https://docs.gradle.org/current/userguide/task_configuration_avoidance.html
 [sample]: https://github.com/GradleUp/auto-manifest/tree/master/sample
