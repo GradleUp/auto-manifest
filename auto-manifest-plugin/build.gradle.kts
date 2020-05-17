@@ -29,7 +29,6 @@ java {
 }
 
 publishing {
-
     publications.withType<MavenPublication> {
         pom {
             groupId = findProperty("GROUP")?.toString()
