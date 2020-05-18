@@ -13,6 +13,10 @@ Unfortunately, `package` property must be defined in `AndroidManifest.xml` and m
 
 Here comes AutoManifest Gradle Plugin to rescue 🚀
 
+- This is not meant for full replacement for AndroidManifest.xml file. It is useful for those 1-liner manifests where you don't have any `Activity/Service` or permission defined.
+- It is easy to integrate into current projects. If manifest file is present, it will be no-op.
+- You can add it per module or to the root `build.gradle`. If applied to root, it will even auto generate package names based on module paths.
+
 Configuration
 -------------
 
@@ -74,8 +78,9 @@ Ta-da 🎉 Now just put your Java/Kotlin files and don't worry about the rest.
 Performance
 -----------
 
-This project uses Gradle's [Lazy Task Configuration APIs][lazy] and do not cause eager task creation in AGP. It also
- generates the `AndroidManifest.xml` file lazily. That means "zero" impact on Android Studio Sync times. 
+- This project uses Gradle's [Lazy Task Configuration APIs][lazy] and do not cause eager task creation in AGP.
+- It generates the `AndroidManifest.xml` file lazily. That means "zero" impact on Gradle configuration times.
+- It supports build cache so that the files are generated only once and re-used across builds.
 
 Sample App
 ----------
