@@ -13,7 +13,7 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v2
       - name: Publish the plugin artifacts
-        run: ./gradlew publish
+        run: ./gradlew publish publishPlugins -Pgradle.publish.key="$GRADLE_KEY" -Pgradle.publish.secret="$GRADLE_SECRET"
         env:
           BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
           BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
