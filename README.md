@@ -1,9 +1,7 @@
 Auto Manifest ![CI](https://github.com/GradleUp/auto-manifest/workflows/CI/badge.svg)
 =============
 
-Android projects set up via Gradle build system. `AndroidManifest.xml` file is crucial to define Android specific
- properties like `minSdkVersion`, `uses-permission` etc. Some of are defined through `build.gradle` and AGP (Android
-  Gradle Plugin) merges them automatically.
+`AndroidManifest.xml` file is crucial to define Android specific properties like `minSdkVersion`, `uses-permission` etc.
   
 Unfortunately, `package` property must be defined in `AndroidManifest.xml` and mandatory for `BuildConfig` and `R
 ` class generation. In most of my Gradle modules, `AndroidManifest.xml` is just 1 line:
