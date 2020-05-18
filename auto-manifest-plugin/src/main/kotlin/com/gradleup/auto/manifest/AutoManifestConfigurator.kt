@@ -9,6 +9,7 @@ import com.android.build.gradle.tasks.ManifestProcessorTask
 import com.gradleup.auto.manifest.GenerateManifestTask.Companion.generateManifest
 import com.gradleup.auto.manifest.GenerateManifestTask.Companion.pathSuffixFor
 import org.gradle.api.Project
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.closureOf
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
@@ -70,22 +71,28 @@ internal class AutoManifestConfigurator(
     }
 
     private fun Project.forceGenerateDuringSync() {
-        val packageName = extension.packageName
-        val suffix = pathSuffixFor(
-            rootProjectPath = rootProject.path,
-            currentProjectPath = path,
-            replaceDashesWithDot = extension.replaceDashesWithDot
-        )
-        if (manifestFile.exists().not()) {
-            if (packageName.isPresent) {
-                generateManifest(manifestFile, packageName, suffix)
-            } else {
-                afterEvaluate { generateManifest(manifestFile, packageName, suffix) }
-            }
+        if (manifestFile.exists()) {
+            return
+        }
+        executeOnceAvailable(extension.packageName) { packageName ->
+            val suffix = pathSuffixFor(
+                rootProjectPath = rootProject.path,
+                currentProjectPath = path,
+                replaceDashesWithDot = extension.replaceDashesWithDot
+            )
+            generateManifest(manifestFile, suffix, packageName)
         }
     }
 
     private fun Project.isSyncing() = hasProperty("android.injected.invoked.from.ide")
 
     private val Project.manifestFile get() = File(buildDir, GenerateManifestTask.GENERATED_MANIFEST_PATH)
+
+    private fun <T : Any> Project.executeOnceAvailable(provider: Provider<T>, block: (T?) -> Unit) {
+        if (provider.isPresent) {
+            block(provider.orNull)
+        } else {
+            afterEvaluate { block(provider.orNull) }
+        }
+    }
 }

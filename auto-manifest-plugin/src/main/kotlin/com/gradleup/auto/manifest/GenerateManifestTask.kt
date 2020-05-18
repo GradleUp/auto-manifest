@@ -35,19 +35,15 @@ abstract class GenerateManifestTask : DefaultTask() {
     fun taskAction() {
         manifestFile.get().asFile.apply {
             val suffix = pathSuffixFor(rootProjectPath.get(), projectPath.get(), replaceDashesWithDot)
-            generateManifest(this, packageName, suffix)
+            generateManifest(this, suffix, packageName.orNull)
         }
     }
 
     companion object {
         const val GENERATED_MANIFEST_PATH = "generated/auto-manifest/AndroidManifest.xml"
 
-        fun generateManifest(
-            manifestFile: File,
-            packageNameProperty: Property<String>,
-            suffix: String
-        ) {
-            val packageName = requireNotNull(packageNameProperty.getOrNull()) {
+        fun generateManifest(manifestFile: File, suffix: String, packageName: String?) {
+            requireNotNull(packageName) {
                 "Please provide packageName in your build.gradle file. E.g: autoManifest { packageName = \"com.company.package\" }"
             }
             manifestFile.parentFile.mkdirs()
