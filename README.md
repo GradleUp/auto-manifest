@@ -19,7 +19,7 @@ Configuration
 -------------
 
 [ ![Bintray](https://img.shields.io/bintray/v/gradleup/maven/auto-manifest) ](https://bintray.com/gradleup/maven/auto-manifest/_latestVersion)
-[ ![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/gradleup/auto/manifest/com.gradleup.auto.manifest/maven-metadata.xml.svg?label=Gradle%20Plugins%20Portal) ](https://plugins.gradle.org/plugin/com.gradleup.auto.manifest)
+[ ![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/gradleup/auto/manifest/com.gradleup.auto.manifest.gradle.plugin/maven-metadata.xml.svg?label=Gradle%20Plugins%20Portal) ](https://plugins.gradle.org/plugin/com.gradleup.auto.manifest)
 
 Add the plugin in your `build.gradle` file (preferably in root one)
 
