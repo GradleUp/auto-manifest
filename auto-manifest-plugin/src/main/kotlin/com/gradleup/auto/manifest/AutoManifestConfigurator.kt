@@ -6,6 +6,7 @@ import com.android.build.gradle.api.AndroidSourceFile
 import com.android.build.gradle.api.AndroidSourceSet
 import com.android.build.gradle.tasks.GenerateBuildConfig
 import com.android.build.gradle.tasks.ManifestProcessorTask
+import com.android.build.gradle.tasks.MergeResources
 import com.gradleup.auto.manifest.GenerateManifestTask.Companion.generateManifest
 import com.gradleup.auto.manifest.GenerateManifestTask.Companion.pathSuffixFor
 import org.gradle.api.Project
@@ -64,6 +65,9 @@ internal class AutoManifestConfigurator(
         }
         project.tasks.withType<GenerateBuildConfig>().configureEach {
             mustRunAfter(generateManifest)
+        }
+        project.tasks.withType<MergeResources>().configureEach {
+            dependsOn(generateManifest)
         }
         project.tasks.withType<ManifestProcessorTask>().configureEach {
             dependsOn(generateManifest)
