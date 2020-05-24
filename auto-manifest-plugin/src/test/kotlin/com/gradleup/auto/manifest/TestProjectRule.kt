@@ -50,8 +50,8 @@ class TestProjectRule : TestRule {
                     }
                 }
                 plugins {
-                    id 'com.gradleup.auto.manifest'
-                    id 'com.android.library'
+                    id("com.gradleup.auto.manifest")
+                    id("com.android.library")
                 }
                 
                 allprojects {
@@ -63,7 +63,7 @@ class TestProjectRule : TestRule {
                 }
                 
                 android {
-                    compileSdkVersion 28
+                    compileSdkVersion(28)
                 }
                 
             """.trimIndent()
