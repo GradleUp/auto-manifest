@@ -63,6 +63,7 @@ abstract class GenerateManifestTask : DefaultTask() {
         ): String {
             return currentProjectPath
                 .removePrefix(rootProjectPath)
+                .removePrefix(":")
                 .replace(':', '.')
                 .replace("-", replaceDashesWithDot.map { if (it) "." else "_" }.get())
         }
