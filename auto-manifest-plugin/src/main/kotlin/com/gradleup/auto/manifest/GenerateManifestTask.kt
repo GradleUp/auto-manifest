@@ -3,6 +3,7 @@ package com.gradleup.auto.manifest
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
@@ -58,7 +59,7 @@ abstract class GenerateManifestTask : DefaultTask() {
         fun pathSuffixFor(
             rootProjectPath: String,
             currentProjectPath: String,
-            replaceDashesWithDot: Property<Boolean>
+            replaceDashesWithDot: Provider<Boolean>
         ): String {
             return currentProjectPath
                 .removePrefix(rootProjectPath)

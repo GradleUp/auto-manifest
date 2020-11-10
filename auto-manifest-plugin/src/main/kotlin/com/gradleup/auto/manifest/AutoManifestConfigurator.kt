@@ -82,7 +82,7 @@ internal class AutoManifestConfigurator(
             val suffix = pathSuffixFor(
                 rootProjectPath = rootProject.path,
                 currentProjectPath = path,
-                replaceDashesWithDot = extension.replaceDashesWithDot
+                replaceDashesWithDot = extension.replaceDashesWithDot.orElse(false)
             )
             generateManifest(manifestFile, suffix, packageName)
         }
