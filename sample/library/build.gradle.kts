@@ -6,7 +6,3 @@ plugins {
 android {
     compileSdkVersion(29)
 }
-
-dependencies {
-    implementation(kotlin("stdlib"))
-}

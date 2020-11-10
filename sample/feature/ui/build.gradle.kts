@@ -12,8 +12,7 @@ android {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     implementation(project(":feature:data"))
-    implementation("androidx.fragment:fragment:1.2.4")
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("androidx.fragment:fragment:1.2.5")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
 }

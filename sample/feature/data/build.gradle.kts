@@ -8,6 +8,5 @@ android {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     api(project(":library"))
 }
