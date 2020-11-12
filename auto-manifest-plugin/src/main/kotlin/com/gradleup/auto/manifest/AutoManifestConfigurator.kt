@@ -57,12 +57,7 @@ internal class AutoManifestConfigurator(
             project.forceGenerateDuringSync()
         }
 
-        val generateManifest = project.tasks.register<GenerateManifestTask>("generateAndroidManifest") {
-            packageName.set(extension.packageName)
-            replaceDashesWithDot.set(extension.replaceDashesWithDot.orElse(false))
-            projectPath.set(project.path)
-            rootProjectPath.set(rootProject.path)
-        }
+        val generateManifest = project.registerGenerateManifest()
         project.tasks.withType<GenerateBuildConfig>().configureEach {
             mustRunAfter(generateManifest)
         }
@@ -88,9 +83,13 @@ internal class AutoManifestConfigurator(
         }
     }
 
-    private fun Project.isSyncing() = hasProperty("android.injected.invoked.from.ide")
-
-    private val Project.manifestFile get() = File(buildDir, GenerateManifestTask.GENERATED_MANIFEST_PATH)
+    private fun Project.registerGenerateManifest() =
+        tasks.register<GenerateManifestTask>("generateAndroidManifest") {
+            packageName.set(extension.packageName)
+            replaceDashesWithDot.set(extension.replaceDashesWithDot.orElse(false))
+            projectPath.set(this@registerGenerateManifest.path)
+            rootProjectPath.set(this@AutoManifestConfigurator.rootProject.path)
+        }
 
     private fun <T : Any> Project.executeOnceAvailable(provider: Provider<T>, block: (T?) -> Unit) {
         if (provider.isPresent) {
@@ -98,5 +97,13 @@ internal class AutoManifestConfigurator(
         } else {
             afterEvaluate { block(provider.orNull) }
         }
+    }
+
+    companion object {
+
+        private val Project.manifestFile
+            get() = File(buildDir, GenerateManifestTask.GENERATED_MANIFEST_PATH)
+
+        private fun Project.isSyncing() = hasProperty("android.injected.invoked.from.ide")
     }
 }
