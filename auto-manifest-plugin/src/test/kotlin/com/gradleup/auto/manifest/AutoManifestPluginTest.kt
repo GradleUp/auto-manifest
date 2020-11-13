@@ -113,6 +113,26 @@ class AutoManifestPluginTest {
         assertThat(libraryManifest.readText()).contains("<manifest package=\"test.library.dash\" />")
     }
 
+    @Test
+    fun `should override packageName in when applied in leaf module`() {
+        val leafModule = "library1/data"
+        val leafDir = File(testProject.projectDir, leafModule)
+        val packageNameToOverride = "com.test.override"
+        createNestedModules(listOf(leafModule))
+
+        File(leafDir, "build.gradle").appendText("""
+            
+            apply plugin: 'com.gradleup.auto.manifest'
+            
+            autoManifest { packageName = '$packageNameToOverride' }
+        """.trimIndent())
+
+        testProject.build("assembleDebug", "autoManifest { packageName = 'test' }")
+
+        val libraryManifest = File(leafDir, "build/generated/auto-manifest/AndroidManifest.xml")
+        assertThat(libraryManifest.readText()).contains("<manifest package=\"$packageNameToOverride\" />")
+    }
+
     private fun createNestedModules(moduleNames: List<String>) {
         val commaSeparatedModules = moduleNames.joinToString(separator = ",") {
             "'${it.replace('/', ':')}'"
@@ -128,7 +148,9 @@ class AutoManifestPluginTest {
                     plugins {
                         id 'com.android.library'
                     }
-                    android { compileSdkVersion 28 }
+                    android { 
+                        compileSdkVersion 28 
+                    }
                 """.trimIndent()
             )
         }
