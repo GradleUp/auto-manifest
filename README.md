@@ -75,6 +75,17 @@ autoManifest {
 
 Ta-da 🎉 Now just put your Java/Kotlin files and don't worry about the rest.
 
+Nested Modules
+--------------
+
+To make it easy for you `applyRecursively` is enabled by default. This will automatically generate
+`AndroidManifest.xml` for you in all modules recursively. You have 2 options to override:
+
+- If you need more info like permissions, Activity definitions, you can continue to have your
+`AndroidManifest.xml` and recursive generation will be skipped for that module.
+- If you need to override, you can apply the plugin again in a nested Gradle module and provide a
+custom packageName
+
 Performance
 -----------
 
