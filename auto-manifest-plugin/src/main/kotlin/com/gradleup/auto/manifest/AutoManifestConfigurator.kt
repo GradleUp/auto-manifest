@@ -29,9 +29,15 @@ internal class AutoManifestConfigurator(
         }
         rootProject.afterEvaluate {
             if (extension.applyRecursively.getOrElse(true)) {
-                subprojects.forEach { project ->
-                    project.configure()
-                }
+                subprojects.configureSubjects()
+            }
+        }
+    }
+
+    private fun Set<Project>.configureSubjects() = forEach {
+        it.afterEvaluate {
+            if (pluginManager.hasPlugin("com.gradleup.auto.manifest").not()) {
+                configure()
             }
         }
     }
