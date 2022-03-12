@@ -14,6 +14,7 @@ class TestProjectRule : TestRule {
         "build/test-projects/${System.currentTimeMillis()}"
     )
     private val buildFile = File(projectDir, "build.gradle")
+    private val settingsFile = File(projectDir, "settings.gradle")
     private lateinit var runner: GradleRunner
 
     fun build(taskName: String, extensionBlock: String = ""): BuildResult {
@@ -36,34 +37,33 @@ class TestProjectRule : TestRule {
 
     private fun createRunner(): GradleRunner {
         projectDir.mkdirs()
-        File(projectDir, "settings.gradle").createNewFile()
-        buildFile.writeText(
+        settingsFile.writeText(
             """
-                buildscript {
+                pluginManagement {
                     repositories {
+                        gradlePluginPortal()
                         google()
-                        mavenCentral()
-                        jcenter()
-                    }
-                    dependencies {
-                        classpath("com.android.tools.build:gradle:3.6.3")
                     }
                 }
+                
+            """.trimIndent()
+        )
+        buildFile.writeText(
+            """
                 plugins {
                     id("com.gradleup.auto.manifest")
-                    id("com.android.library")
+                    id("com.android.library") version "7.1.2"
                 }
                 
                 allprojects {
                     repositories {
                         google()
                         mavenCentral()
-                        jcenter()
                     }
                 }
                 
                 android {
-                    compileSdkVersion(28)
+                    compileSdkVersion(31)
                 }
                 
             """.trimIndent()

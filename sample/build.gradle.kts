@@ -1,12 +1,11 @@
 buildscript {
     repositories {
         google()
-        jcenter()
-
+        mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.1.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10")
+        classpath("com.android.tools.build:gradle:7.1.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20-RC")
     }
 }
 plugins {
@@ -20,6 +19,6 @@ autoManifest {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }

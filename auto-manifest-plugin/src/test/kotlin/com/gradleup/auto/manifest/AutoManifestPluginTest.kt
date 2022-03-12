@@ -137,7 +137,7 @@ class AutoManifestPluginTest {
         val commaSeparatedModules = moduleNames.joinToString(separator = ",") {
             "'${it.replace('/', ':')}'"
         }
-        File(testProject.projectDir, "settings.gradle").writeText(
+        File(testProject.projectDir, "settings.gradle").appendText(
             "include($commaSeparatedModules)"
         )
         moduleNames.forEach {
@@ -149,7 +149,7 @@ class AutoManifestPluginTest {
                         id 'com.android.library'
                     }
                     android { 
-                        compileSdkVersion 28 
+                        compileSdkVersion 31 
                     }
                 """.trimIndent()
             )

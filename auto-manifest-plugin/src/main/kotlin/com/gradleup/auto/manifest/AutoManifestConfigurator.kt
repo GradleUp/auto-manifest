@@ -1,9 +1,8 @@
 package com.gradleup.auto.manifest
 
+import com.android.build.api.dsl.AndroidSourceSet
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.LibraryPlugin
-import com.android.build.gradle.api.AndroidSourceFile
-import com.android.build.gradle.api.AndroidSourceSet
 import com.android.build.gradle.tasks.GenerateBuildConfig
 import com.android.build.gradle.tasks.ManifestProcessorTask
 import com.android.build.gradle.tasks.MergeResources
@@ -11,7 +10,6 @@ import com.gradleup.auto.manifest.GenerateManifestTask.Companion.generateManifes
 import com.gradleup.auto.manifest.GenerateManifestTask.Companion.pathSuffixFor
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
-import org.gradle.kotlin.dsl.closureOf
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import java.io.File
@@ -55,9 +53,9 @@ internal class AutoManifestConfigurator(
     }
 
     private fun AndroidSourceSet.setupGeneratedManifest(project: Project) {
-        manifest(closureOf<AndroidSourceFile> {
+        manifest {
             srcFile(project.manifestFile)
-        })
+        }
 
         if (project.isSyncing()) {
             project.forceGenerateDuringSync()

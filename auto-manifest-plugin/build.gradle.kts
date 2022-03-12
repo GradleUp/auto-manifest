@@ -67,8 +67,8 @@ publishing {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.android.tools.build:gradle:3.6.3")
+    implementation("com.android.tools.build:gradle:7.1.2")
 
-    testImplementation("junit:junit:4.13")
-    testImplementation("com.google.truth:truth:1.0.1")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("com.google.truth:truth:1.1.3")
 }
