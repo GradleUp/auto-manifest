@@ -74,10 +74,10 @@ internal class AutoManifestConfigurator(
     }
 
     private fun Project.forceGenerateDuringSync() {
-        if (manifestFile.exists()) {
-            return
-        }
+        if (manifestFile.exists()) return
+
         executeOnceAvailable(extension.packageName) { packageName ->
+            if (extension.enabled.getOrElse(true).not()) return@executeOnceAvailable
             val suffix = pathSuffixFor(
                 rootProjectPath = rootProject.path,
                 currentProjectPath = path,
@@ -89,6 +89,9 @@ internal class AutoManifestConfigurator(
 
     private fun Project.registerGenerateManifest() =
         tasks.register<GenerateManifestTask>("generateAndroidManifest") {
+            onlyIf {
+                extension.enabled.getOrElse(true)
+            }
             packageName.set(extension.packageName)
             replaceDashesWithDot.set(extension.replaceDashesWithDot.orElse(false))
             projectPath.set(this@registerGenerateManifest.path)

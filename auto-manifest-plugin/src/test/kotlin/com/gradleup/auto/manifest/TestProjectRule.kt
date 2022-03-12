@@ -17,9 +17,12 @@ class TestProjectRule : TestRule {
     private val settingsFile = File(projectDir, "settings.gradle")
     private lateinit var runner: GradleRunner
 
-    fun build(taskName: String, extensionBlock: String = ""): BuildResult {
+    fun build(taskName: String, extensionBlock: String = "", arg: String? = null): BuildResult {
         buildFile.appendText(extensionBlock)
-        return runner.withArguments(taskName, "--stacktrace").build()
+        return runner.apply {
+            withArguments(taskName, "--stacktrace")
+            arg?.let { withArguments(arg) }
+        }.build()
     }
 
     fun buildAndFail(taskName: String, extensionBlock: String = ""): BuildResult {
