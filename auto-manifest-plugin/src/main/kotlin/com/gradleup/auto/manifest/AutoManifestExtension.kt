@@ -22,8 +22,8 @@ abstract class AutoManifestExtension {
     /**
      * Disables auto manifest generation per module (aka subproject)
      *
-     * When [applyRecursively] is enabled, if you face any issues on certain modules with custom
-     * setup, you can use this to disable for a certain module.
+     * When [applyRecursively] is enabled, if you face any issues on a certain module with custom
+     * setup, you can use this to disable for that module.
      *
      * Example in a module:
      *
