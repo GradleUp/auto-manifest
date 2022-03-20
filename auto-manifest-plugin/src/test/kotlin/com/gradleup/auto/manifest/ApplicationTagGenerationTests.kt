@@ -12,6 +12,28 @@ class ApplicationTagGenerationTests {
     val testProject = TestProjectRule()
 
     @Test
+    fun `should parse properties successfully`() {
+        val result = testProject.build("assembleDebug",
+            """
+                autoManifest { 
+                    packageName = 'test'
+                    
+                    application {
+                        name = ".SampleApplication"
+                        label = "@string/app_name"
+                        icon = "@mipmap/ic_launcher"
+                        roundIcon = "@mipmap/ic_launcher_round"
+                        supportsRtl = true
+                        theme = "@style/Theme.RoadRunner"
+                    }
+                }
+            """.trimIndent())
+
+        Truth.assertThat(result.task(":assembleDebug")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        Truth.assertThat(testProject.generatedFile().readText()).contains("<manifest package=\"test\" />")
+    }
+
+    @Test
     fun `should generate all application properties`() {
         val result = testProject.build(
             "assembleDebug",
