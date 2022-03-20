@@ -13,9 +13,15 @@ class TestProjectRule : TestRule {
         System.getProperty("user.dir"),
         "build/test-projects/${System.currentTimeMillis()}"
     )
-    private val buildFile = File(projectDir, "build.gradle")
-    private val settingsFile = File(projectDir, "settings.gradle")
+    private val buildFile = file("build.gradle")
+    private val settingsFile = file("settings.gradle")
     private lateinit var runner: GradleRunner
+
+    fun file(path: String, modulePath: String = "") =
+        File(File(projectDir, modulePath), path)
+
+    fun generatedFile(path: String = "auto-manifest/AndroidManifest.xml", modulePath: String = "") =
+        File(File(projectDir, "$modulePath/build/generated"), path)
 
     fun build(taskName: String, extensionBlock: String = "", arg: String? = null): BuildResult {
         buildFile.appendText(extensionBlock)
@@ -71,7 +77,7 @@ class TestProjectRule : TestRule {
                 
             """.trimIndent()
         )
-        val valuesDir = File(projectDir, "src/main/res/values")
+        val valuesDir = file("src/main/res/values")
         valuesDir.mkdirs()
         File(valuesDir, "strings.xml").writeText(
             """

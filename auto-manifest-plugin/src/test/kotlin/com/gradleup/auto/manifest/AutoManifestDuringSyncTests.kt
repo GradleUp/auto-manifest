@@ -3,7 +3,6 @@ package com.gradleup.auto.manifest
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
 class AutoManifestDuringSyncTests {
 
@@ -11,7 +10,7 @@ class AutoManifestDuringSyncTests {
     @JvmField
     val testProject = TestProjectRule()
 
-    private val generatedManifest = File(testProject.projectDir, GENERATED_MANIFEST_PATH)
+    private val generatedManifest = testProject.generatedFile("auto-manifest/AndroidManifest.xml")
 
     @Test
     fun `should generate manifest during Android Studio sync`() {
@@ -39,11 +38,6 @@ class AutoManifestDuringSyncTests {
             arg = "-Pandroid.injected.invoked.from.ide=true"
         )
         assertThat(generatedManifest.exists()).isFalse()
-    }
-
-    companion object {
-        private const val GENERATED_MANIFEST_PATH =
-            "build/generated/auto-manifest/AndroidManifest.xml"
     }
 
 }

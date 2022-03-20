@@ -6,11 +6,11 @@ fun TestProjectRule.createNestedModules(moduleNames: List<String>) {
     val commaSeparatedModules = moduleNames.joinToString(separator = ",") {
         "'${it.replace('/', ':')}'"
     }
-    File(projectDir, "settings.gradle").appendText(
+    file("settings.gradle").appendText(
         "include($commaSeparatedModules)"
     )
     moduleNames.forEach {
-        val moduleDir = File(projectDir, it)
+        val moduleDir = file(it)
         moduleDir.mkdirs()
         File(moduleDir, "build.gradle").writeText(
             """
