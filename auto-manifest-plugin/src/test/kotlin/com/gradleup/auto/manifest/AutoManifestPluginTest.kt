@@ -4,7 +4,6 @@ import com.google.common.truth.Truth.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
 class AutoManifestPluginTest {
 
@@ -12,10 +11,8 @@ class AutoManifestPluginTest {
     @JvmField
     val testProject = TestProjectRule()
 
-    private val regularManifest =
-        File(testProject.projectDir, "src/main/AndroidManifest.xml")
-    private val generatedManifest =
-        File(testProject.projectDir, "build/generated/auto-manifest/AndroidManifest.xml")
+    private val regularManifest = testProject.file("src/main/AndroidManifest.xml")
+    private val generatedManifest = testProject.generatedFile("auto-manifest/AndroidManifest.xml")
 
     @Test
     fun `should fail without plugin and manifest`() {
@@ -69,8 +66,7 @@ class AutoManifestPluginTest {
 
         testProject.build("assembleDebug", "autoManifest { packageName = 'test' }")
 
-        val libraryDir = File(testProject.projectDir, "library-dash")
-        val libraryManifest = File(libraryDir, "build/generated/auto-manifest/AndroidManifest.xml")
+        val libraryManifest = testProject.generatedFile(modulePath = "library-dash")
         assertThat(libraryManifest.readText()).contains("<manifest package=\"test.library_dash\" />")
     }
 
@@ -88,8 +84,7 @@ class AutoManifestPluginTest {
             """.trimIndent()
         )
 
-        val libraryDir = File(testProject.projectDir, "library-dash")
-        val libraryManifest = File(libraryDir, "build/generated/auto-manifest/AndroidManifest.xml")
+        val libraryManifest = testProject.generatedFile(modulePath = "library-dash")
         assertThat(libraryManifest.readText()).contains("<manifest package=\"test.library.dash\" />")
     }
 

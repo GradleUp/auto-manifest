@@ -12,7 +12,7 @@ class NestedModuleSupportTests {
     @JvmField
     val testProject = TestProjectRule()
 
-    private val generatedManifest = File(testProject.projectDir, GENERATED_MANIFEST_PATH)
+    private val generatedManifest = testProject.generatedFile()
 
     @Test
     fun `should recursively generate manifest`() {
@@ -25,8 +25,7 @@ class NestedModuleSupportTests {
         assertThat(generatedManifest.readText()).contains("<manifest package=\"test\" />")
 
         libraries.forEach {
-            val libraryDir = File(testProject.projectDir, it)
-            val libraryManifest = File(libraryDir, Companion.GENERATED_MANIFEST_PATH)
+            val libraryManifest = testProject.generatedFile(modulePath = it)
             val suffix = it.replace('/', '.')
             assertThat(libraryManifest.readText()).contains("<manifest package=\"test.$suffix\" />")
         }
@@ -70,10 +69,10 @@ class NestedModuleSupportTests {
         assertThat(result.task(":assembleDebug")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         assertThat(generatedManifest.readText()).contains("<manifest package=\"test\" />")
 
-        val enabledLibraryManifest = File(testProject.projectDir, "library1/$GENERATED_MANIFEST_PATH")
+        val enabledLibraryManifest = testProject.generatedFile(modulePath = "library1")
         assertThat(enabledLibraryManifest.exists()).isTrue()
 
-        val disabledLibraryManifest = File(testProject.projectDir, "library2/$GENERATED_MANIFEST_PATH")
+        val disabledLibraryManifest = testProject.generatedFile(modulePath = "library2")
         assertThat(disabledLibraryManifest.exists()).isFalse()
         assertThat(result.task(":library2:generateAndroidManifest")!!.outcome).isEqualTo(TaskOutcome.SKIPPED)
     }
@@ -81,11 +80,10 @@ class NestedModuleSupportTests {
     @Test
     fun `should override packageName in when applied in leaf module`() {
         val leafModule = "library1/data"
-        val leafDir = File(testProject.projectDir, leafModule)
         val packageNameToOverride = "com.test.override"
         testProject.createNestedModules(listOf(leafModule))
 
-        File(leafDir, "build.gradle").appendText("""
+        testProject.file(modulePath = leafModule, path = "build.gradle").appendText("""
             apply plugin: 'com.gradleup.auto.manifest'
             
             autoManifest { packageName = '$packageNameToOverride' }
@@ -93,13 +91,8 @@ class NestedModuleSupportTests {
 
         testProject.build("assembleDebug", "autoManifest { packageName = 'test' }")
 
-        val libraryManifest = File(leafDir, GENERATED_MANIFEST_PATH)
+        val libraryManifest = testProject.generatedFile(modulePath = leafModule)
         assertThat(libraryManifest.readText()).contains("<manifest package=\"$packageNameToOverride\" />")
     }
-
-    companion object {
-        private const val GENERATED_MANIFEST_PATH = "build/generated/auto-manifest/AndroidManifest.xml"
-    }
-
 }
 
