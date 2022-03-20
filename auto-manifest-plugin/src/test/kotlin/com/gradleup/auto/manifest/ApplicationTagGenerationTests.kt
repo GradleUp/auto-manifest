@@ -50,4 +50,30 @@ class ApplicationTagGenerationTests {
         """.trimIndent()
         Truth.assertThat(testProject.generatedFile().readText()).isEqualTo(expected)
     }
+
+    @Test
+    fun `should generate single property`() {
+        val result = testProject.build(
+            "assembleDebug",
+            """
+                autoManifest { 
+                    packageName = 'test'
+                    application.name = ".SampleApplication"
+                }
+            """.trimIndent()
+        )
+
+        Truth.assertThat(result.task(":assembleDebug")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        @Language("xml")
+        val expected = """
+            <?xml version="1.0" encoding="utf-8"?>
+            <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+              package="test">
+              <application
+                android:name=".SampleApplication"
+              />
+            </manifest>
+        """.trimIndent()
+        Truth.assertThat(testProject.generatedFile().readText()).isEqualTo(expected)
+    }
 }
