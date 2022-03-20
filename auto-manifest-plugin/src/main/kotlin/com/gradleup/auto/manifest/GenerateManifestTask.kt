@@ -6,6 +6,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -17,6 +18,9 @@ abstract class GenerateManifestTask : DefaultTask() {
 
     @get:Input
     abstract val replaceDashesWithDot: Property<Boolean>
+
+    @get:Nested
+    abstract val applicationSettings: AutoManifestExtension.ApplicationSettings
 
     @get:Input
     abstract val projectPath: Property<String>
@@ -35,7 +39,8 @@ abstract class GenerateManifestTask : DefaultTask() {
     @TaskAction
     fun taskAction() {
         manifestFile.get().asFile.apply {
-            val suffix = pathSuffixFor(rootProjectPath.get(), projectPath.get(), replaceDashesWithDot)
+            val suffix =
+                pathSuffixFor(rootProjectPath.get(), projectPath.get(), replaceDashesWithDot)
             generateManifest(this, suffix, packageName.orNull)
         }
     }

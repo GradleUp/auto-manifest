@@ -4,6 +4,8 @@ import org.gradle.api.Action
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.kotlin.dsl.newInstance
 import javax.inject.Inject
 
@@ -75,11 +77,11 @@ abstract class AutoManifestExtension @Inject constructor(
 
 
     abstract class ApplicationSettings {
-        abstract val name: Property<String>
-        abstract val icon: Property<String>
-        abstract val label: Property<String>
-        abstract val roundIcon: Property<String>
-        abstract val supportsRtl: Property<Boolean>
-        abstract val theme: Property<String>
+        @get:Input @get:Optional abstract val name: Property<String>
+        @get:Input @get:Optional abstract val icon: Property<String>
+        @get:Input @get:Optional abstract val label: Property<String>
+        @get:Input @get:Optional abstract val roundIcon: Property<String>
+        @get:Input @get:Optional abstract val supportsRtl: Property<Boolean>
+        @get:Input @get:Optional abstract val theme: Property<String>
     }
 }
