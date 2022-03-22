@@ -89,6 +89,11 @@ internal class AutoManifestConfigurator(
 
     private fun Project.registerGenerateManifest() =
         tasks.register<GenerateManifestTask>("generateAndroidManifest") {
+            /**
+             * Re-assigning to a local variable to keep configuration cache.
+             * Otherwise inner lambda (onlyIf) will accidentally reference to `Project` instance
+             */
+            val extension = extension
             onlyIf {
                 extension.enabled.getOrElse(true)
             }
