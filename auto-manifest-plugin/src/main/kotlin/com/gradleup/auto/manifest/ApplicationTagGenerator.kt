@@ -16,18 +16,6 @@ class GenerateApplicationTag(
 
     @OptIn(ExperimentalStdlibApi::class)
     private fun buildInternal() = buildList {
-        applicationSettings.name.ifPresent {
-            add("    android:name=\"$it\"")
-        }
-        applicationSettings.label.ifPresent {
-            add("    android:label=\"$it\"")
-        }
-        applicationSettings.icon.ifPresent {
-            add("    android:icon=\"$it\"")
-        }
-        applicationSettings.roundIcon.ifPresent {
-            add("    android:roundIcon=\"$it\"")
-        }
         applicationSettings.theme.ifPresent {
             add("    android:theme=\"$it\"")
         }
