@@ -1,6 +1,5 @@
 plugins {
     id("com.android.library")
-    kotlin("android")
 }
 
 android {
@@ -8,5 +7,5 @@ android {
 }
 
 dependencies {
-    api(project(":library"))
+    api("androidx.appcompat:appcompat:1.4.1")
 }
