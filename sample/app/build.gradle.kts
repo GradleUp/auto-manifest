@@ -4,16 +4,16 @@ plugins {
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdk = 31
 
     defaultConfig {
         applicationId = "com.gradleup.auto.manifest.sample"
-        minSdkVersion(21)
+        minSdk = 21
     }
 }
 
 dependencies {
     implementation(project(":feature:ui"))
-    implementation("androidx.appcompat:appcompat:1.1.0")
-    implementation("androidx.core:core-ktx:1.2.0")
+    implementation(project(":base-theme"))
+    implementation("androidx.core:core-ktx:1.7.0")
 }
