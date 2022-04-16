@@ -97,6 +97,10 @@ class NestedModuleSupportTests {
 
         val libraryManifest = testProject.generatedFile(modulePath = leafModule)
         assertThat(libraryManifest.readText()).contains("<manifest/>")
+
+        // check merged manifest for correct package name
+        val mergedManifest = testProject.file("build/intermediates/merged_manifest/debug/AndroidManifest.xml", modulePath = leafModule)
+        assertThat(mergedManifest.readText()).contains("package=\"$packageNameToOverride\" >")
     }
 }
 

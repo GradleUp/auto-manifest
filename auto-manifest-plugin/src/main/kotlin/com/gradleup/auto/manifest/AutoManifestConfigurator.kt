@@ -17,17 +17,17 @@ import org.gradle.kotlin.dsl.withType
 import java.io.File
 
 internal class AutoManifestConfigurator(
-    private val rootProject: Project,
+    private val appliedProject: Project,
     private val extension: AutoManifestExtension
 ) {
 
     fun configure() {
-        rootProject.configure()
+        appliedProject.configure()
         extension.generatedManifest.apply {
-            set(rootProject.manifestFile)
+            set(appliedProject.manifestFile)
             finalizeValue()
         }
-        rootProject.afterEvaluate {
+        appliedProject.afterEvaluate {
             if (extension.applyRecursively.getOrElse(true)) {
                 subprojects.configureSubjects()
             }
@@ -48,7 +48,7 @@ internal class AutoManifestConfigurator(
                 val packageName = extension.packageName.orNull
                     ?: throw GradleException("Please provide packageName in your build.gradle file. E.g: autoManifest { packageName = \"com.company.package\" }")
                 val suffix = pathSuffixFor(
-                    rootProjectPath = rootProject.path,
+                    rootProjectPath = appliedProject.path,
                     currentProjectPath = path,
                     replaceDashesWithDot = extension.replaceDashesWithDot.orElse(false)
                 )
