@@ -83,7 +83,7 @@ internal class AutoManifestConfigurator(
                 currentProjectPath = path,
                 replaceDashesWithDot = extension.replaceDashesWithDot.orElse(false)
             )
-            generateManifest(manifestFile, suffix, packageName, extension.application)
+            generateManifest(manifestFile, suffix, packageName)
         }
     }
 
@@ -99,7 +99,6 @@ internal class AutoManifestConfigurator(
             }
             packageName.set(extension.packageName)
             replaceDashesWithDot.set(extension.replaceDashesWithDot.orElse(false))
-            applicationSettings.set(extension.application)
             projectPath.set(this@registerGenerateManifest.path)
             rootProjectPath.set(this@AutoManifestConfigurator.rootProject.path)
         }
