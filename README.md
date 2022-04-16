@@ -59,26 +59,13 @@ autoManifest {
     // autoManifest.disable()
     //
     disable()
- 
-    // Allows you to define certain useful application tag properties in library manifest files.
-    application {
-     
-        // Allows additional lint checks and useful IDE features to support right to left languages.
-        // Default: not set
-        supportsRtl.set(true)
-     
-        // The theme to be shown automatically in layout previews in IDE.
-        // This helps all layout files in all library modules to be consistent.
-        // Default: not set
-        theme.set("@style/AppTheme")
-    }
 }
 ```
 </details>
 
 <details><summary>Groovy</summary>
 
-```groovy
+```kotlin
 plugins {
     id 'com.gradleup.auto.manifest' version '<latest-version>'
 }
@@ -113,19 +100,6 @@ autoManifest {
     // autoManifest.disable()
     //
     disable()
-
-    // Allows you to define certain useful application tag properties in library manifest files.
-    application {
-   
-     // Allows additional lint checks and useful IDE features to support right to left languages.
-     // Default: not set
-     supportsRtl = true
-   
-     // The theme to be shown automatically in layout previews in IDE.
-     // This helps all layout files in all library modules to be consistent.
-     // Default: not set
-     theme = '@style/AppTheme'
-    }
 }
 ```
 </details>
