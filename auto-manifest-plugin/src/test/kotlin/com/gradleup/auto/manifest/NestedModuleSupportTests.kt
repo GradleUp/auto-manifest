@@ -26,8 +26,12 @@ class NestedModuleSupportTests {
 
         libraries.forEach {
             val libraryManifest = testProject.generatedFile(modulePath = it)
-            val suffix = it.replace('/', '.')
             assertThat(libraryManifest.readText()).contains("<manifest/>")
+
+            // check merged manifest for correct package name
+            val suffix = it.replace('/', '.')
+            val mergedManifest = testProject.file("build/intermediates/merged_manifest/debug/AndroidManifest.xml", modulePath = it)
+            assertThat(mergedManifest.readText()).contains("package=\"test.$suffix\" >")
         }
     }
 

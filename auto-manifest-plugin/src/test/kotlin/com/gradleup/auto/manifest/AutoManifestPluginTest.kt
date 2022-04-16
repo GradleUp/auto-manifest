@@ -25,6 +25,9 @@ class AutoManifestPluginTest {
 
         assertThat(result.task(":assembleDebug")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         assertThat(generatedManifest.readText()).contains("<manifest/>")
+
+        val mergedManifest = testProject.file("build/intermediates/merged_manifest/debug/AndroidManifest.xml")
+        assertThat(mergedManifest.readText()).contains("package=\"test\" >")
     }
 
     @Test
