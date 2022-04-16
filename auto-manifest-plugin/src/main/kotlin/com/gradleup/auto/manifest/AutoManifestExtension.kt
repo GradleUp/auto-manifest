@@ -77,6 +77,10 @@ abstract class AutoManifestExtension @Inject constructor(
 
 
     abstract class ApplicationSettings {
+        @get:Input @get:Optional abstract val name: Property<String>
+        @get:Input @get:Optional abstract val label: Property<String>
+        @get:Input @get:Optional abstract val icon: Property<String>
+        @get:Input @get:Optional abstract val roundIcon: Property<String>
         @get:Input @get:Optional abstract val supportsRtl: Property<Boolean>
         @get:Input @get:Optional abstract val theme: Property<String>
     }
