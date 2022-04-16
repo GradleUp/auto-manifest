@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdkVersion(29)
 }

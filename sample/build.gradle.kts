@@ -14,11 +14,6 @@ plugins {
 
 autoManifest {
     packageName.set("com.gradleup.auto.manifest.sample")
-
-    application {
-        supportsRtl.set(true)
-        theme.set("@style/AppTheme")
-    }
 }
 
 allprojects {

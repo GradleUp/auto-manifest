@@ -4,16 +4,15 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdkVersion(29)
     defaultConfig {
-        minSdk = 21
+        minSdkVersion(21)
     }
     resourcePrefix("feature")
 }
 
 dependencies {
     implementation(project(":feature:data"))
-    implementation(project(":base-theme"))
-    implementation("androidx.fragment:fragment:1.4.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
+    implementation("androidx.fragment:fragment:1.2.5")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
 }
