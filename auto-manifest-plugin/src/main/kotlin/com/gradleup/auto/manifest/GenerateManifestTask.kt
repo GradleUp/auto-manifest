@@ -2,27 +2,14 @@ package com.gradleup.auto.manifest
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
 @CacheableTask
 abstract class GenerateManifestTask : DefaultTask() {
-    @get:Input
-    abstract val packageName: Property<String>
-
-    @get:Input
-    abstract val replaceDashesWithDot: Property<Boolean>
-
-    @get:Input
-    abstract val projectPath: Property<String>
-
-    @get:Input
-    abstract val rootProjectPath: Property<String>
 
     @get:OutputFile
     abstract val manifestFile: RegularFileProperty
@@ -35,23 +22,19 @@ abstract class GenerateManifestTask : DefaultTask() {
     @TaskAction
     fun taskAction() {
         manifestFile.get().asFile.apply {
-            val suffix = pathSuffixFor(rootProjectPath.get(), projectPath.get(), replaceDashesWithDot)
-            generateManifest(this, suffix, packageName.orNull)
+            generateManifest(this)
         }
     }
 
     companion object {
         const val GENERATED_MANIFEST_PATH = "generated/auto-manifest/AndroidManifest.xml"
 
-        fun generateManifest(manifestFile: File, suffix: String, packageName: String?) {
-            requireNotNull(packageName) {
-                "Please provide packageName in your build.gradle file. E.g: autoManifest { packageName = \"com.company.package\" }"
-            }
+        fun generateManifest(manifestFile: File) {
             manifestFile.parentFile.mkdirs()
             manifestFile.writeText(
                 """
                     <?xml version="1.0" encoding="utf-8"?>
-                    <manifest package="$packageName${suffix.prependDot()}" />
+                    <manifest/>
                 """.trimIndent()
             )
         }
@@ -67,7 +50,5 @@ abstract class GenerateManifestTask : DefaultTask() {
                 .replace(':', '.')
                 .replace("-", replaceDashesWithDot.map { if (it) "." else "_" }.get())
         }
-
-        private fun String.prependDot() = if (isNotEmpty()) ".$this" else this
     }
 }

@@ -20,12 +20,15 @@ class AutoManifestDuringSyncTests {
             arg = "-Pandroid.injected.invoked.from.ide=true"
         )
 
-        assertThat(generatedManifest.readText()).contains("<manifest package=\"test\" />")
+        assertThat(generatedManifest.readText()).contains("<manifest/>")
     }
 
     @Test
     fun `should NOT generate manifest during configuration`() {
-        testProject.build("help")
+        testProject.build(
+            taskName = "help",
+            extensionBlock = "autoManifest { packageName = 'test' }",
+        )
 
         assertThat(generatedManifest.exists()).isFalse()
     }

@@ -24,7 +24,7 @@ class AutoManifestPluginTest {
         val result = testProject.build("assembleDebug", "autoManifest { packageName = 'test' }")
 
         assertThat(result.task(":assembleDebug")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(generatedManifest.readText()).contains("<manifest package=\"test\" />")
+        assertThat(generatedManifest.readText()).contains("<manifest/>")
     }
 
     @Test
@@ -36,7 +36,7 @@ class AutoManifestPluginTest {
                 <manifest package="com.gradleup.example" />
             """.trimIndent()
         )
-        val result = testProject.build("assembleDebug")
+        val result = testProject.build("assembleDebug", "autoManifest { packageName = 'test' }")
 
         assertThat(result.task(":assembleDebug")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         assertThat(result.task(":generateAndroidManifest")).isNull()
@@ -67,7 +67,7 @@ class AutoManifestPluginTest {
         testProject.build("assembleDebug", "autoManifest { packageName = 'test' }")
 
         val libraryManifest = testProject.generatedFile(modulePath = "library-dash")
-        assertThat(libraryManifest.readText()).contains("<manifest package=\"test.library_dash\" />")
+        assertThat(libraryManifest.readText()).contains("<manifest/>")
     }
 
     @Test
@@ -85,7 +85,7 @@ class AutoManifestPluginTest {
         )
 
         val libraryManifest = testProject.generatedFile(modulePath = "library-dash")
-        assertThat(libraryManifest.readText()).contains("<manifest package=\"test.library.dash\" />")
+        assertThat(libraryManifest.readText()).contains("<manifest/>")
     }
 
 }
