@@ -20,7 +20,7 @@ abstract class GenerateManifestTask : DefaultTask() {
     abstract val replaceDashesWithDot: Property<Boolean>
 
     @get:Nested
-    abstract val applicationSettings: Property<AutoManifestExtension.ApplicationSettings>
+    abstract val applicationSettings: AutoManifestExtension.ApplicationSettings
 
     @get:Input
     abstract val projectPath: Property<String>
@@ -41,42 +41,24 @@ abstract class GenerateManifestTask : DefaultTask() {
         manifestFile.get().asFile.apply {
             val suffix =
                 pathSuffixFor(rootProjectPath.get(), projectPath.get(), replaceDashesWithDot)
-            generateManifest(this, suffix, packageName.orNull, applicationSettings.get())
+            generateManifest(this, suffix, packageName.orNull)
         }
     }
 
     companion object {
         const val GENERATED_MANIFEST_PATH = "generated/auto-manifest/AndroidManifest.xml"
 
-        fun generateManifest(
-            manifestFile: File,
-            suffix: String,
-            packageName: String?,
-            application: AutoManifestExtension.ApplicationSettings
-        ) {
+        fun generateManifest(manifestFile: File, suffix: String, packageName: String?) {
             requireNotNull(packageName) {
                 "Please provide packageName in your build.gradle file. E.g: autoManifest { packageName = \"com.company.package\" }"
             }
             manifestFile.parentFile.mkdirs()
-            val generateApplicationTag = GenerateApplicationTag(application)
-            val applicationTag = generateApplicationTag()
-            if (applicationTag.isEmpty()) {
-                manifestFile.writeText(
-                    """
+            manifestFile.writeText(
+                """
                     <?xml version="1.0" encoding="utf-8"?>
                     <manifest package="$packageName${suffix.prependDot()}" />
-                    """.trimIndent()
-                )
-            } else {
-                manifestFile.writeText(
-                    """|<?xml version="1.0" encoding="utf-8"?>
-                    |<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-                    |  package="$packageName${suffix.prependDot()}">
-                    |  $applicationTag
-                    |</manifest>
-                """.trimMargin()
-                )
-            }
+                """.trimIndent()
+            )
         }
 
         fun pathSuffixFor(
