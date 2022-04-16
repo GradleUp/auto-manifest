@@ -1,22 +1,9 @@
 package com.gradleup.auto.manifest
 
-import org.gradle.api.Action
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
-import org.gradle.kotlin.dsl.newInstance
-import javax.inject.Inject
 
-abstract class AutoManifestExtension @Inject constructor(
-    objects: ObjectFactory
-) {
-
-    val application = objects.newInstance<ApplicationSettings>()
-
-    fun application(action: Action<ApplicationSettings>) {
-        action.execute(application)
-    }
-
+abstract class AutoManifestExtension {
     /**
      * packageName that will be set in generated AndroidManifest.xml
      *
@@ -72,14 +59,4 @@ abstract class AutoManifestExtension @Inject constructor(
      * Read-only generated AndroidManifest.xml location for advanced users.
      */
     abstract val generatedManifest: RegularFileProperty
-
-
-    abstract class ApplicationSettings {
-        abstract val name: Property<String>
-        abstract val icon: Property<String>
-        abstract val label: Property<String>
-        abstract val roundIcon: Property<String>
-        abstract val supportsRtl: Property<Boolean>
-        abstract val theme: Property<String>
-    }
 }
