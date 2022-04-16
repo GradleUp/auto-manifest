@@ -21,6 +21,10 @@ class ApplicationTagGenerationTests {
                     packageName = 'test'
                     
                     application {
+                        name = ".SampleApplication"
+                        label = "@string/app_name"
+                        icon = "@mipmap/ic_launcher"
+                        roundIcon = "@mipmap/ic_launcher_round"
                         supportsRtl = true
                         theme = "@style/Theme.RoadRunner"
                     }
@@ -35,6 +39,10 @@ class ApplicationTagGenerationTests {
             <manifest xmlns:android="http://schemas.android.com/apk/res/android"
               package="test">
               <application
+                android:name=".SampleApplication"
+                android:label="@string/app_name"
+                android:icon="@mipmap/ic_launcher"
+                android:roundIcon="@mipmap/ic_launcher_round"
                 android:theme="@style/Theme.RoadRunner"
                 android:supportsRtl="true"
               />
@@ -50,7 +58,7 @@ class ApplicationTagGenerationTests {
             """
                 autoManifest { 
                     packageName = 'test'
-                    application.supportsRtl = true
+                    application.name = ".SampleApplication"
                 }
             """.trimIndent()
         )
@@ -62,7 +70,7 @@ class ApplicationTagGenerationTests {
             <manifest xmlns:android="http://schemas.android.com/apk/res/android"
               package="test">
               <application
-                android:supportsRtl="true"
+                android:name=".SampleApplication"
               />
             </manifest>
         """.trimIndent()
