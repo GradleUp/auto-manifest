@@ -10,10 +10,6 @@ android {
         applicationId = "com.gradleup.auto.manifest.sample"
         minSdk = 21
     }
-
-    lint {
-      checkDependencies = true
-    }
 }
 
 dependencies {
