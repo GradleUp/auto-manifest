@@ -3,6 +3,5 @@ include(":app")
 include(":feature:data")
 include(":feature:ui")
 include(":library")
-include(":base-theme")
 
 includeBuild("../")
