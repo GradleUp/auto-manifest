@@ -1,3 +1,10 @@
+
+# This project is archived
+
+With Android Gradle Plugin namespaces ([doc](https://developer.android.com/build/configure-app-module#set-namespace)), most of the functionality provided by this plugin is now natively supported and we do not plan to support this plugin anymore.
+
+----
+
 Auto Manifest ![CI](https://github.com/GradleUp/auto-manifest/workflows/CI/badge.svg)
 =============
 
